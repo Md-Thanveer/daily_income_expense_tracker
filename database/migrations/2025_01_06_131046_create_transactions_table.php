@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             // 'income' or 'expense'
             $table->string('type')->default(TransactionType::EXPENSE); 
+            $table->string('date');
             
             $table->decimal('amount', 10, 2);
             $table->text('description')->nullable();
