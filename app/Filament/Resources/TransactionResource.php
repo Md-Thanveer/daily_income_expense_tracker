@@ -13,6 +13,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+use App\Enums\TransactionType;
+
 class TransactionResource extends Resource
 {
     protected static ?string $model = Transaction::class;
@@ -23,10 +25,10 @@ class TransactionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('type')
+                Forms\Components\Radio::make('type')
                     ->required()
-                    ->maxLength(255)
-                    ->default('EXPENSE'),
+                    ->options(TransactionType::class)
+                    ->default(TransactionType::EXPENSE),
                 Forms\Components\TextInput::make('amount')
                     ->required()
                     ->numeric(),
@@ -80,5 +82,10 @@ class TransactionResource extends Resource
             'create' => Pages\CreateTransaction::route('/create'),
             'edit' => Pages\EditTransaction::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 }
