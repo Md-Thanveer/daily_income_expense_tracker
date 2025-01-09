@@ -1,9 +1,14 @@
 <?php
+
 namespace App\Http\Controllers\api\v2;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 use App\Enums\TransactionType;
+
 use App\Models\Transaction;
+
 class TransactionController extends Controller
 {
     /**
@@ -16,11 +21,13 @@ class TransactionController extends Controller
         $transactions = Transaction::when($type !== 'all', function ($query) use ($type) {
             $query->where('type', $type);
         })->get();
+
         return response()->json([
-            'success' => true,
+            // 'success' => true,
             'data' => $transactions,
         ]);
     }
+
     /**
      * Store a new transaction.
      */
@@ -32,15 +39,37 @@ class TransactionController extends Controller
             'description' => 'nullable|string',
             'date' => 'required|date',
         ]);
+
         $transaction = Transaction::create([
             'type' => $validated['type'],
             'amount' => $validated['amount'],
             'description' => $validated['description'] ?? null,
             'date' => $validated['date'],
         ]);
+
         return response()->json([
             'success' => true,
             'data' => $transaction,
         ], 201);
+    }
+
+    /**
+     * Get a single transaction by ID.
+     */
+    public function show($id)
+    {
+        $transaction = Transaction::find($id);
+
+        if (!$transaction) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Transaction not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $transaction,
+        ]);
     }
 }
