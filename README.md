@@ -27,9 +27,3 @@ This project provides a simple and intuitive way to manage financial transaction
 - **Authentication**: Laravel Breeze or Sanctum (optional)
 
 ---
-
-## Installation 🛠️
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-repo/laravel-transaction-management.git
